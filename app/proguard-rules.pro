@@ -28,3 +28,16 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+
+# Unobfuscatable
+-keep class com.tomclaw.vika.util.Unobfuscatable
+-keep class * implements com.tomclaw.vika.util.Unobfuscatable
+-keepclassmembernames class * implements com.tomclaw.vika.util.Unobfuscatable {
+  !transient <fields>;
+}
+-keepnames class * implements com.tomclaw.vika.util.Unobfuscatable {
+  !transient <fields>;
+}
+-keepclassmembers class * implements com.tomclaw.vika.util.Unobfuscatable {
+  <init>(...);
+}
