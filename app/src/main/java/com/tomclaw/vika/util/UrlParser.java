@@ -24,10 +24,13 @@ public class UrlParser {
 
     public static Map<String, String> parse(final URI uri, final String encoding) {
         Map<String, String> result = Collections.emptyMap();
-        final String query = uri.getRawQuery();
-        if (query != null && query.length() > 0) {
+        String params = uri.getRawQuery();
+        if (params == null) {
+            params = uri.getRawFragment();
+        }
+        if (params != null && params.length() > 0) {
             result = new HashMap<>();
-            parse(result, new Scanner(query), encoding);
+            parse(result, new Scanner(params), encoding);
         }
         return result;
     }

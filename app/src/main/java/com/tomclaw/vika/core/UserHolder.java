@@ -1,6 +1,8 @@
 package com.tomclaw.vika.core;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.tomclaw.minion.Minion;
@@ -22,28 +24,30 @@ public class UserHolder {
     private static final String KEY_ACCESS_TOKEN = "access_token";
     private static final String KEY_EXPIRES_IN = "expires_in";
 
-    private UserData userData;
+    private @Nullable UserData userData;
 
     private File userFile;
+    private Minion minion;
 
     public static UserHolder create(Context context) {
         UserHolder userHolder = new UserHolder(context);
+        FileStorage storage = FileStorage.create(userHolder.userFile);
+        userHolder.minion = Minion.lets()
+                .load(storage)
+                .and()
+                .store(storage)
+                .sync();
         userHolder.load();
         return userHolder;
     }
 
     private UserHolder(Context context) {
-        userData = new UserData();
         File storage = context.getDir(STORAGE_FOLDER, Context.MODE_PRIVATE);
         userFile = new File(storage, USER_FILE);
     }
 
     private void load() {
         try {
-            Minion minion = Minion.lets()
-                    .load(FileStorage.create(userFile))
-                    .sync();
-
             String userId = minion.getValue(USER_GROUP_NAME, KEY_USER_ID);
             String accessToken = minion.getValue(USER_GROUP_NAME, KEY_ACCESS_TOKEN);
             String expiresIn = minion.getValue(USER_GROUP_NAME, KEY_EXPIRES_IN);
@@ -56,25 +60,19 @@ public class UserHolder {
         }
     }
 
-    public void store() {
-        Minion.lets()
-                .store(FileStorage.create(userFile))
-                .async(new ResultCallback() {
-                    @Override
-                    public void onReady(Minion minion) {
-                        minion.setValue(USER_GROUP_NAME, KEY_USER_ID, userData.getUserId());
-                        minion.setValue(USER_GROUP_NAME, KEY_ACCESS_TOKEN, userData.getAccessToken());
-                        minion.setValue(USER_GROUP_NAME, KEY_EXPIRES_IN, Long.toString(userData.getExpiresIn()));
-                    }
-
-                    @Override
-                    public void onFailure(Exception ex) {
-                        Logger.log("unable to store user data");
-                    }
-                });
+    public void hold(@NonNull final UserData userData) {
+        this.userData = userData;
+        minion.setValue(USER_GROUP_NAME, KEY_USER_ID, userData.getUserId());
+        minion.setValue(USER_GROUP_NAME, KEY_ACCESS_TOKEN, userData.getAccessToken());
+        minion.setValue(USER_GROUP_NAME, KEY_EXPIRES_IN, Long.toString(userData.getExpiresIn()));
+        minion.store();
     }
 
-    public UserData getUserData() {
+    public @Nullable UserData getUserData() {
         return userData;
+    }
+
+    public boolean isUnauthorized() {
+        return userData == null;
     }
 }

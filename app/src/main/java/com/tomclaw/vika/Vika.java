@@ -2,7 +2,11 @@ package com.tomclaw.vika;
 
 import android.app.Application;
 
+import com.tomclaw.vika.core.UserHolder;
 import com.tomclaw.vika.core.VkApi;
+import com.tomclaw.vika.di.AppComponent;
+import com.tomclaw.vika.di.AppModule;
+import com.tomclaw.vika.di.DaggerAppComponent;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -12,14 +16,22 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  */
 public class Vika extends Application {
 
+    private static AppComponent component;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.vk.com/method/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        component = buildComponent();
+    }
+
+    public static AppComponent getComponent() {
+        return component;
+    }
+
+    private AppComponent buildComponent() {
+        return DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
                 .build();
-        VkApi api = retrofit.create(VkApi.class);
     }
 }

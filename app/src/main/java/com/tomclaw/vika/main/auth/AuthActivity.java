@@ -2,17 +2,25 @@ package com.tomclaw.vika.main.auth;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.tomclaw.vika.R;
+import com.tomclaw.vika.Vika;
 import com.tomclaw.vika.core.Config;
+import com.tomclaw.vika.core.UserData;
+import com.tomclaw.vika.core.UserHolder;
 import com.tomclaw.vika.util.UrlBuilder;
 import com.tomclaw.vika.util.UrlParser;
 
 import java.net.URI;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 /**
  * Created by solkin on 05/11/2017.
@@ -21,11 +29,16 @@ public class AuthActivity extends AppCompatActivity {
 
     private static final String REDIRECT_URL = "https://oauth.vk.com/blank.html";
 
+    @Inject
+    UserHolder userHolder;
+
     private WebView webView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Vika.getComponent().inject(this);
 
         setContentView(R.layout.activity_auth);
 
@@ -35,8 +48,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void initWebView() {
-        String url = prepareAuthUrl();
-        webView.loadUrl(url);
+        loadAuthUrl();
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(REDIRECT_URL)) {
@@ -46,6 +58,11 @@ public class AuthActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void loadAuthUrl() {
+        String url = prepareAuthUrl();
+        webView.loadUrl(url);
     }
 
     private String prepareAuthUrl() {
@@ -66,6 +83,17 @@ public class AuthActivity extends AppCompatActivity {
         String expiresIn = params.get("expires_in");
         String userId = params.get("user_id");
 
+        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(expiresIn)) {
+            // TODO: add more convenient error handling.
+            showError(R.string.auth_error);
+            return;
+        }
+
+        userHolder.hold(new UserData(accessToken, Long.parseLong(expiresIn), userId));
         finish();
+    }
+
+    private void showError(@StringRes int errorMessage) {
+        Snackbar.make(webView, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 }

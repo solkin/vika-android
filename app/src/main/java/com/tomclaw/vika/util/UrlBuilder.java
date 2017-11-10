@@ -52,7 +52,7 @@ public class UrlBuilder extends ArrayList<Pair<String, String>> {
             params = prepareParameters(this);
         } catch (UnsupportedEncodingException ignored) {
         }
-        return url + params;
+        return url + "?" + params;
     }
 
     public void reset() {
@@ -66,7 +66,6 @@ public class UrlBuilder extends ArrayList<Pair<String, String>> {
     private static String prepareParameters(List<Pair<String, String>> pairs)
             throws UnsupportedEncodingException {
         StringBuilder builder = new StringBuilder();
-        // Perform pair concatenation.
         for (Pair<String, String> pair : pairs) {
             if (builder.length() > 0) {
                 builder.append('&');

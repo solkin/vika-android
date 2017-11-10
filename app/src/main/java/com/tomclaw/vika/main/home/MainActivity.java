@@ -9,9 +9,16 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.tomclaw.vika.R;
+import com.tomclaw.vika.Vika;
+import com.tomclaw.vika.core.UserHolder;
 import com.tomclaw.vika.main.auth.AuthActivity;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    UserHolder userHolder;
 
     private TextView textMessage;
 
@@ -38,14 +45,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Vika.getComponent().inject(this);
+
         setContentView(R.layout.activity_main);
 
         textMessage = findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
-        Intent intent = new Intent(this, AuthActivity.class);
-        startActivity(intent);
+        checkAuthorization();
+    }
+
+    private void checkAuthorization() {
+        if (userHolder.isUnauthorized()) {
+            Intent intent = new Intent(this, AuthActivity.class);
+            startActivity(intent);
+        }
     }
 
 }
