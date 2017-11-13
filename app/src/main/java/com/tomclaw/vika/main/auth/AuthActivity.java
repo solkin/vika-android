@@ -1,5 +1,7 @@
 package com.tomclaw.vika.main.auth;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -7,6 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -17,6 +21,7 @@ import com.tomclaw.vika.Vika;
 import com.tomclaw.vika.core.Config;
 import com.tomclaw.vika.core.UserData;
 import com.tomclaw.vika.core.UserHolder;
+import com.tomclaw.vika.util.Logger;
 import com.tomclaw.vika.util.UrlBuilder;
 import com.tomclaw.vika.util.UrlParser;
 
@@ -55,6 +60,9 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void initWebView() {
+        clearCookies(this);
+        webView.clearCache(true);
+        webView.clearHistory();
         loadAuthUrl();
         webView.setWebViewClient(new WebViewClient() {
 
@@ -114,5 +122,23 @@ public class AuthActivity extends AppCompatActivity {
 
     private void showError(@StringRes int errorMessage) {
         Snackbar.make(webView, errorMessage, Snackbar.LENGTH_LONG).show();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void clearCookies(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Logger.log("Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            Logger.log("Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+            CookieSyncManager syncManager = CookieSyncManager.createInstance(context);
+            syncManager.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            syncManager.stopSync();
+            syncManager.sync();
+        }
     }
 }
