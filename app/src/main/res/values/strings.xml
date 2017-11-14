@@ -3,6 +3,8 @@
     <string name="title_dialogs">Dialogs</string>
     <string name="title_contacts">Contacts</string>
     <string name="title_account">Account</string>
+    <string name="network_error">There was a network error. Please, check internet connection and try again.</string>
     <string name="auth_error">Sorry, unable to auth in VK. Please, try again some later.</string>
     <string name="auth_title">Authorization</string>
+    <string name="retry">Retry</string>
 </resources>

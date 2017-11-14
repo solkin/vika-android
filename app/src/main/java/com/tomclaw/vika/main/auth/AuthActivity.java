@@ -5,16 +5,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.tomclaw.vika.R;
 import com.tomclaw.vika.Vika;
@@ -41,6 +42,12 @@ public class AuthActivity extends AppCompatActivity {
     UserHolder userHolder;
 
     private WebView webView;
+    private ViewFlipper viewFlipper;
+    private AppCompatImageView errorIcon;
+    private TextView errorText;
+    private View retryButton;
+
+    private boolean isError = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +58,10 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
 
         webView = findViewById(R.id.web_view);
+        viewFlipper = findViewById(R.id.view_flipper);
+        errorIcon = findViewById(R.id.error_icon);
+        errorText = findViewById(R.id.error_text);
+        retryButton = findViewById(R.id.retry_button);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,17 +74,19 @@ public class AuthActivity extends AppCompatActivity {
         clearCookies(this);
         webView.clearCache(true);
         webView.clearHistory();
-        loadAuthUrl();
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
+                if (!isError) {
+                    showContent();
+                }
             }
 
             @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Logger.log(failingUrl);
+                showError(R.string.network_error, (buttonView) -> loadAuthUrl());
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -85,10 +98,16 @@ public class AuthActivity extends AppCompatActivity {
             }
 
         });
+        loadAuthUrl();
     }
 
     private void loadAuthUrl() {
         String url = prepareAuthUrl();
+        loadUrl(url);
+    }
+
+    private void loadUrl(String url) {
+        showProgress();
         webView.loadUrl(url);
     }
 
@@ -111,8 +130,7 @@ public class AuthActivity extends AppCompatActivity {
         String userId = params.get("user_id");
 
         if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(expiresIn)) {
-            // TODO: add more convenient error handling.
-            showError(R.string.auth_error);
+            showError(R.string.auth_error, (retryButton) -> loadAuthUrl());
             return;
         }
 
@@ -120,8 +138,21 @@ public class AuthActivity extends AppCompatActivity {
         finish();
     }
 
-    private void showError(@StringRes int errorMessage) {
-        Snackbar.make(webView, errorMessage, Snackbar.LENGTH_LONG).show();
+    private void showProgress() {
+        isError = false;
+        viewFlipper.setDisplayedChild(0);
+    }
+
+    private void showContent() {
+        viewFlipper.setDisplayedChild(1);
+    }
+
+    private void showError(@StringRes int message, View.OnClickListener listener) {
+        isError = true;
+        viewFlipper.setDisplayedChild(2);
+        errorIcon.setImageResource(R.drawable.ic_network_error);
+        errorText.setText(message);
+        retryButton.setOnClickListener(listener);
     }
 
     @SuppressWarnings("deprecation")

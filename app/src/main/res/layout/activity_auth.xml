@@ -5,10 +5,22 @@
 
     <include layout="@layout/toolbar" />
 
-    <WebView
-        android:id="@+id/web_view"
+    <ViewFlipper
+        android:id="@+id/view_flipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize" />
+        android:layout_marginTop="?actionBarSize">
+
+        <include layout="@layout/progress_view" />
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include layout="@layout/error_view" />
+
+    </ViewFlipper>
+
 
 </FrameLayout>
