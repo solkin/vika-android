@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.tomclaw.minion.Minion;
-import com.tomclaw.minion.ResultCallback;
 import com.tomclaw.minion.storage.FileStorage;
 import com.tomclaw.vika.util.Logger;
 

@@ -86,6 +86,7 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Logger.log(failingUrl);
+                // TODO: try to reload failed request
                 showError(R.string.network_error, (buttonView) -> loadAuthUrl());
             }
 

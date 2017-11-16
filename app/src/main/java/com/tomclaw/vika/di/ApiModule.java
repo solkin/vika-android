@@ -15,11 +15,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  * Created by Igor on 10.11.2017.
  */
 @Module
-public class ApiModule {
+class ApiModule {
 
     @Provides
     @Singleton
-    public VkApi provideApi(Context context) {
+    VkApi provideApi(Context context) {
         return new Retrofit.Builder()
                 .baseUrl("https://api.vk.com/method/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
