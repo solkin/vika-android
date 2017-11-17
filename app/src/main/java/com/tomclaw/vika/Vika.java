@@ -2,14 +2,9 @@ package com.tomclaw.vika;
 
 import android.app.Application;
 
-import com.tomclaw.vika.core.UserHolder;
-import com.tomclaw.vika.core.VkApi;
 import com.tomclaw.vika.di.AppComponent;
 import com.tomclaw.vika.di.AppModule;
 import com.tomclaw.vika.di.DaggerAppComponent;
-
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * Created by solkin on 05/11/2017.

@@ -5,11 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.jakewharton.rxrelay2.BehaviorRelay;
+import com.jakewharton.rxrelay2.Relay;
 import com.tomclaw.minion.Minion;
 import com.tomclaw.minion.storage.FileStorage;
 import com.tomclaw.vika.util.Logger;
 
 import java.io.File;
+
+import io.reactivex.Observable;
 
 /**
  * Created by Igor on 09.11.2017.
@@ -23,10 +27,13 @@ public class UserHolder {
     private static final String KEY_ACCESS_TOKEN = "access_token";
     private static final String KEY_EXPIRES_IN = "expires_in";
 
-    private @Nullable UserData userData;
+    @Nullable
+    private UserData userData;
 
     private File userFile;
     private Minion minion;
+
+    private Relay<UserData> userDataRelay;
 
     public static UserHolder create(Context context) {
         UserHolder userHolder = new UserHolder(context);
@@ -43,6 +50,12 @@ public class UserHolder {
     private UserHolder(Context context) {
         File storage = context.getDir(STORAGE_FOLDER, Context.MODE_PRIVATE);
         userFile = new File(storage, USER_FILE);
+        userDataRelay = BehaviorRelay.create();
+    }
+
+    private void setUserData(@NonNull final UserData userData) {
+        this.userData = userData;
+        userDataRelay.accept(userData);
     }
 
     private void load() {
@@ -52,7 +65,7 @@ public class UserHolder {
             String expiresIn = minion.getValue(USER_GROUP_NAME, KEY_EXPIRES_IN);
 
             if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(accessToken) && !TextUtils.isEmpty(expiresIn)) {
-                userData = new UserData(accessToken, Long.parseLong(expiresIn), userId);
+                setUserData(new UserData(accessToken, Long.parseLong(expiresIn), userId));
             }
         } catch (Throwable ex) {
             Logger.log("unable to load user data");
@@ -60,14 +73,19 @@ public class UserHolder {
     }
 
     public void hold(@NonNull final UserData userData) {
-        this.userData = userData;
+        setUserData(userData);
         minion.setValue(USER_GROUP_NAME, KEY_USER_ID, userData.getUserId());
         minion.setValue(USER_GROUP_NAME, KEY_ACCESS_TOKEN, userData.getAccessToken());
         minion.setValue(USER_GROUP_NAME, KEY_EXPIRES_IN, Long.toString(userData.getExpiresIn()));
         minion.store();
     }
 
-    public @Nullable UserData getUserData() {
+    public Observable<UserData> userDataChanges() {
+        return userDataRelay;
+    }
+
+    @Nullable
+    public UserData getUserData() {
         return userData;
     }
 

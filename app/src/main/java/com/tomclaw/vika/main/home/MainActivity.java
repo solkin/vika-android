@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.tomclaw.vika.R;
 import com.tomclaw.vika.Vika;
 import com.tomclaw.vika.core.UserHolder;
+import com.tomclaw.vika.core.UserSession;
 import com.tomclaw.vika.main.auth.AuthActivity;
 
 import javax.inject.Inject;
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     UserHolder userHolder;
+
+    @Inject
+    UserSession userSession;
 
     private TextView textMessage;
 
