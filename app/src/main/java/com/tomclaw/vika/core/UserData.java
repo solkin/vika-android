@@ -10,9 +10,11 @@ import com.tomclaw.vika.util.Unobfuscatable;
  */
 public class UserData implements Unobfuscatable {
 
-    private @Nullable String accessToken;
+    @Nullable
+    private String accessToken;
     private long expiresIn;
-    private @Nullable String userId;
+    @Nullable
+    private String userId;
 
     public UserData() {
     }

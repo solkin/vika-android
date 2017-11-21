@@ -12,7 +12,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitCenter"
-        tools:src="@drawable/ic_network_error"/>
+        tools:src="@drawable/ic_network_error" />
 
     <TextView
         android:id="@+id/error_text"
