@@ -19,25 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-# Platform calls Class.forName on types which do not exist on Android to determine platform.
--dontnote retrofit2.Platform
-# Platform used when running on Java 8 VMs. Will not be used at runtime.
--dontwarn retrofit2.Platform$Java8
-# Retain generic type information for use by reflection by converters and adapters.
--keepattributes Signature
-# Retain declared checked exceptions for use by a Proxy instance.
--keepattributes Exceptions
-
-# Unobfuscatable
--keep class com.tomclaw.vika.util.Unobfuscatable
--keep class * implements com.tomclaw.vika.util.Unobfuscatable
--keepclassmembernames class * implements com.tomclaw.vika.util.Unobfuscatable {
-  !transient <fields>;
-}
--keepnames class * implements com.tomclaw.vika.util.Unobfuscatable {
-  !transient <fields>;
-}
--keepclassmembers class * implements com.tomclaw.vika.util.Unobfuscatable {
-  <init>(...);
-}
