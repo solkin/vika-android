@@ -6,7 +6,7 @@ import com.tomclaw.mandarinx.screen.home.adapter.dialog.DialogItem
 
 interface DialogConverter {
 
-    fun convert(book: Dialog): Item
+    fun convert(dialog: Dialog): Item
 
 }
 

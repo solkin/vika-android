@@ -36,8 +36,8 @@ class DialogItemViewHolder(view: View) : BaseViewHolder(view), DialogItemView {
     override fun setIcon(url: String?) {
         GlideApp.with(icon)
             .load(url)
-            .placeholder(R.drawable.ic_launcher_background)
-            .centerCrop()
+            .placeholder(R.drawable.ic_avatar_placeholder)
+            .circleCrop()
             .into(icon)
     }
 
