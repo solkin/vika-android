@@ -5,7 +5,7 @@ import android.util.LongSparseArray
 import com.avito.konveyor.adapter.AdapterPresenter
 import com.avito.konveyor.blueprint.Item
 import com.avito.konveyor.data_source.ListDataSource
-import com.tomclaw.vika.dto.Dialog
+import com.tomclaw.vika.dto.Chat
 import com.tomclaw.vika.screen.home.adapter.ItemClickListener
 import com.tomclaw.vika.util.SchedulersFactory
 import dagger.Lazy
@@ -39,7 +39,7 @@ interface HomePresenter : ItemClickListener {
 class HomePresenterImpl(
     private val interactor: HomeInteractor,
     private val adapterPresenter: Lazy<AdapterPresenter>,
-    private val dialogConverter: DialogConverter,
+    private val chatConverter: ChatConverter,
     private val schedulers: SchedulersFactory,
     state: Bundle?
 ) : HomePresenter {
@@ -49,7 +49,7 @@ class HomePresenterImpl(
 
     private val subscriptions = CompositeDisposable()
 
-    private val dialogIds = LongSparseArray<Dialog>()
+    private val chatIds = LongSparseArray<Chat>()
 
     override fun attachView(view: HomeView) {
         this.view = view
@@ -58,7 +58,7 @@ class HomePresenterImpl(
             onBackPressed()
         }
 
-        loadDialogs()
+        loadChats()
     }
 
     override fun detachView() {
@@ -77,8 +77,8 @@ class HomePresenterImpl(
     override fun saveState() = Bundle().apply {
     }
 
-    private fun loadDialogs() {
-        subscriptions += interactor.listDialogs()
+    private fun loadChats() {
+        subscriptions += interactor.listChats()
             .observeOn(schedulers.mainThread())
             .doOnSubscribe { view?.showProgress() }
             .doAfterTerminate { view?.showContent() }
@@ -88,12 +88,12 @@ class HomePresenterImpl(
             )
     }
 
-    private fun onLoaded(dialogs: List<Dialog>) {
-        val items = dialogs.asSequence()
+    private fun onLoaded(chats: List<Chat>) {
+        val items = chats.asSequence()
             .sortedBy { it.lastMsg?.time ?: 0 }
             .map {
-                val item = dialogConverter.convert(it)
-                dialogIds.put(item.id, it)
+                val item = chatConverter.convert(it)
+                chatIds.put(item.id, it)
                 item
             }
             .toList()
@@ -113,7 +113,7 @@ class HomePresenterImpl(
     }
 
     override fun onItemClick(item: Item) {
-        val dialog = dialogIds[item.id] ?: return
+        val chat = chatIds[item.id] ?: return
 //        subscriptions += interactor.switchBook(bookId)
 //            .observeOn(schedulers.mainThread())
 //            .subscribe(

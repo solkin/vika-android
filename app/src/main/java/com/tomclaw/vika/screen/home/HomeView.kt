@@ -21,7 +21,7 @@ interface HomeView {
 
     fun navigationClicks(): Observable<Unit>
 
-    fun openDialogClicks(): Observable<Unit>
+    fun openChatClicks(): Observable<Unit>
 
 }
 
@@ -32,11 +32,11 @@ class HomeViewImpl(
 
     private val context = view.context
     private val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-    private val openDialogButton: FloatingActionButton = view.findViewById(R.id.open_dialog)
+    private val openChatButton: FloatingActionButton = view.findViewById(R.id.open_chat)
     private val recycler: RecyclerView = view.findViewById(R.id.recycler)
 
     private val navigationRelay = PublishRelay.create<Unit>()
-    private val openDialogRelay = PublishRelay.create<Unit>()
+    private val openChatRelay = PublishRelay.create<Unit>()
 
     init {
         toolbar.setTitle(R.string.app_name)
@@ -49,8 +49,8 @@ class HomeViewImpl(
         recycler.itemAnimator = DefaultItemAnimator()
         recycler.itemAnimator?.changeDuration = DURATION_MEDIUM
 
-        openDialogButton.setOnClickListener {
-            openDialogRelay.accept(Unit)
+        openChatButton.setOnClickListener {
+            openChatRelay.accept(Unit)
         }
     }
 
@@ -68,8 +68,8 @@ class HomeViewImpl(
 
     override fun navigationClicks(): Observable<Unit> = navigationRelay
 
-    override fun openDialogClicks(): Observable<Unit> {
-        return openDialogRelay
+    override fun openChatClicks(): Observable<Unit> {
+        return openChatRelay
     }
 
 }

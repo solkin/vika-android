@@ -6,10 +6,10 @@ import com.avito.konveyor.ItemBinder
 import com.avito.konveyor.adapter.AdapterPresenter
 import com.avito.konveyor.adapter.SimpleAdapterPresenter
 import com.avito.konveyor.blueprint.ItemBlueprint
-import com.tomclaw.vika.core.Dialogs
+import com.tomclaw.vika.core.Chats
 import com.tomclaw.vika.screen.home.*
-import com.tomclaw.vika.screen.home.adapter.dialog.DialogItemBlueprint
-import com.tomclaw.vika.screen.home.adapter.dialog.DialogItemPresenter
+import com.tomclaw.vika.screen.home.adapter.chat.ChatItemBlueprint
+import com.tomclaw.vika.screen.home.adapter.chat.ChatItemPresenter
 import com.tomclaw.vika.util.PerActivity
 import com.tomclaw.vika.util.SchedulersFactory
 import dagger.Lazy
@@ -28,12 +28,12 @@ class HomeModule(
     internal fun providePresenter(
         interactor: HomeInteractor,
         adapterPresenter: Lazy<AdapterPresenter>,
-        dialogConverter: DialogConverter,
+        chatConverter: ChatConverter,
         schedulers: SchedulersFactory
     ): HomePresenter = HomePresenterImpl(
         interactor,
         adapterPresenter,
-        dialogConverter,
+        chatConverter,
         schedulers,
         state
     )
@@ -41,20 +41,20 @@ class HomeModule(
     @Provides
     @PerActivity
     internal fun provideInteractor(
-        dialogs: Dialogs,
+        chats: Chats,
         schedulers: SchedulersFactory
-    ): HomeInteractor = HomeInteractorImpl(dialogs, schedulers)
+    ): HomeInteractor = HomeInteractorImpl(chats, schedulers)
 
     @Provides
     @PerActivity
-    internal fun provideResourceProvider(): DialogsResourceProvider {
-        return DialogsResourceProviderImpl(context.resources)
+    internal fun provideResourceProvider(): ChatsResourceProvider {
+        return ChatsResourceProviderImpl(context.resources)
     }
 
     @Provides
     @PerActivity
-    internal fun provideDialogConverter(resourceProvider: DialogsResourceProvider): DialogConverter {
-        return DialogConverterImpl(resourceProvider)
+    internal fun provideChatConverter(resourceProvider: ChatsResourceProvider): ChatConverter {
+        return ChatConverterImpl(resourceProvider)
     }
 
     @Provides
@@ -77,12 +77,12 @@ class HomeModule(
     @IntoSet
     @PerActivity
     internal fun provideBookItemBlueprint(
-        presenter: DialogItemPresenter
-    ): ItemBlueprint<*, *> = DialogItemBlueprint(presenter)
+        presenter: ChatItemPresenter
+    ): ItemBlueprint<*, *> = ChatItemBlueprint(presenter)
 
     @Provides
     @PerActivity
     internal fun provideBookItemPresenter(presenter: HomePresenter) =
-        DialogItemPresenter(presenter)
+        ChatItemPresenter(presenter)
 
 }

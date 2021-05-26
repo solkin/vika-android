@@ -1,4 +1,4 @@
-package com.tomclaw.vika.screen.home.adapter.dialog
+package com.tomclaw.vika.screen.home.adapter.chat
 
 import android.view.View
 import android.widget.ImageView
@@ -9,7 +9,7 @@ import com.tomclaw.vika.R
 import com.tomclaw.vika.core.GlideApp
 import com.tomclaw.vika.util.bind
 
-interface DialogItemView : ItemView {
+interface ChatItemView : ItemView {
 
     fun setIcon(url: String?)
 
@@ -21,7 +21,7 @@ interface DialogItemView : ItemView {
 
 }
 
-class DialogItemViewHolder(view: View) : BaseViewHolder(view), DialogItemView {
+class ChatItemViewHolder(view: View) : BaseViewHolder(view), ChatItemView {
 
     private val icon: ImageView = view.findViewById(R.id.icon)
     private val title: TextView = view.findViewById(R.id.title)

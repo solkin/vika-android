@@ -13,13 +13,13 @@
         android:layout_marginTop="?attr/actionBarSize" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/open_dialog"
+        android:id="@+id/open_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:contentDescription="@string/open_dialog"
+        android:contentDescription="@string/open_chat"
         android:focusable="true"
         android:src="@drawable/ic_baseline_open_dialog_24"
         app:fabSize="normal" />

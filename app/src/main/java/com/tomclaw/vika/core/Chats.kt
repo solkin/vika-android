@@ -1,23 +1,23 @@
 package com.tomclaw.vika.core
 
 import android.database.sqlite.SQLiteDatabase
-import com.tomclaw.vika.dto.Dialog
-import com.tomclaw.vika.dto.DialogType
+import com.tomclaw.vika.dto.Chat
+import com.tomclaw.vika.dto.ChatType
 import io.reactivex.Observable
 
-interface Dialogs {
+interface Chats {
 
-    fun list(): Observable<List<Dialog>>
+    fun list(): Observable<List<Chat>>
 
-    fun add(dialog: Dialog)
+    fun add(chat: Chat)
 
     fun delete(chatId: Int)
 
 }
 
-class DialogsImpl(val db: SQLiteDatabase) : Dialogs {
+class ChatsImpl(val db: SQLiteDatabase) : Chats {
 
-    override fun list(): Observable<List<Dialog>> {
+    override fun list(): Observable<List<Chat>> {
         val avatars = listOf(
             "https://molecus.com/files/stat/molecus-userfiles/user1023/460e006957d905daee26abe1d4b71c186ee773b2-220x220-1.jpg",
             "https://molecus.com/files/stat/molecus-userfiles/user973/82df536cfc16dd2832e09f794cc5bc864c76be0c-220x220-1.jpg",
@@ -31,14 +31,14 @@ class DialogsImpl(val db: SQLiteDatabase) : Dialogs {
             "https://molecus.com/files/stat/molecus-userfiles/user964/362b55220394104164cc32935d743f0631c2e41f-220x220-1.jpg",
             "https://molecus.com/files/stat/molecus-userfiles/user737/5c6efb61ccdf9-220x220-1.jpg",
         )
-        val list = ArrayList<Dialog>()
+        val list = ArrayList<Chat>()
         for (c in 0..10) {
             list.add(
-                Dialog(
+                Chat(
                     c,
                     System.currentTimeMillis() + c,
-                    DialogType.PRIVATE,
-                    "Dialog $c",
+                    ChatType.PRIVATE,
+                    "Chat $c",
                     avatars[c],
                     c,
                     null,
@@ -49,7 +49,7 @@ class DialogsImpl(val db: SQLiteDatabase) : Dialogs {
         return Observable.just(list)
     }
 
-    override fun add(dialog: Dialog) {
+    override fun add(chat: Chat) {
         TODO("Not yet implemented")
     }
 

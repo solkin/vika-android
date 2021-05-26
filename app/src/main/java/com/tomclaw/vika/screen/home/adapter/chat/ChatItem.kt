@@ -1,10 +1,10 @@
-package com.tomclaw.vika.screen.home.adapter.dialog
+package com.tomclaw.vika.screen.home.adapter.chat
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.avito.konveyor.blueprint.Item
 
-class DialogItem(
+class ChatItem(
     override val id: Long,
     val icon: String?,
     val title: String,
@@ -20,16 +20,16 @@ class DialogItem(
 
     override fun describeContents(): Int = 0
 
-    companion object CREATOR : Parcelable.Creator<DialogItem> {
-        override fun createFromParcel(parcel: Parcel): DialogItem {
+    companion object CREATOR : Parcelable.Creator<ChatItem> {
+        override fun createFromParcel(parcel: Parcel): ChatItem {
             val id = parcel.readLong()
             val icon = parcel.readString()
             val title = parcel.readString().orEmpty()
             val subtitle = parcel.readString()
-            return DialogItem(id, icon, title, subtitle)
+            return ChatItem(id, icon, title, subtitle)
         }
 
-        override fun newArray(size: Int): Array<DialogItem?> {
+        override fun newArray(size: Int): Array<ChatItem?> {
             return arrayOfNulls(size)
         }
     }

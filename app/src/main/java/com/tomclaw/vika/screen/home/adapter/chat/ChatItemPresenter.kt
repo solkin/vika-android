@@ -1,13 +1,13 @@
-package com.tomclaw.vika.screen.home.adapter.dialog
+package com.tomclaw.vika.screen.home.adapter.chat
 
 import com.avito.konveyor.blueprint.ItemPresenter
 import com.tomclaw.vika.screen.home.adapter.ItemClickListener
 
-class DialogItemPresenter(
+class ChatItemPresenter(
     private val listener: ItemClickListener
-) : ItemPresenter<DialogItemView, DialogItem> {
+) : ItemPresenter<ChatItemView, ChatItem> {
 
-    override fun bindView(view: DialogItemView, item: DialogItem, position: Int) {
+    override fun bindView(view: ChatItemView, item: ChatItem, position: Int) {
         view.setIcon(item.icon)
         view.setTitle(item.title)
         view.setSubtitle(item.subtitle)

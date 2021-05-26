@@ -3,10 +3,10 @@ package com.tomclaw.vika.dto
 import android.os.Parcel
 import android.os.Parcelable
 
-class Dialog(
+class Chat(
     val chatId: Int,
     val updateTime: Long,
-    val type: DialogType,
+    val type: ChatType,
     val title: String,
     var icon: String?,
     var unreadCount: Int,
@@ -27,11 +27,11 @@ class Dialog(
 
     override fun describeContents(): Int = 0
 
-    companion object CREATOR : Parcelable.Creator<Dialog> {
-        override fun createFromParcel(parcel: Parcel): Dialog {
+    companion object CREATOR : Parcelable.Creator<Chat> {
+        override fun createFromParcel(parcel: Parcel): Chat {
             val chatId = parcel.readInt()
             val updateTime = parcel.readLong()
-            val type = DialogType.fromInt(parcel.readInt())
+            val type = ChatType.fromInt(parcel.readInt())
             val title = parcel.readString().orEmpty()
             val icon = parcel.readString()
             val unreadCount = parcel.readInt()
@@ -39,17 +39,17 @@ class Dialog(
             val participants = ArrayList<Participant>().apply {
                 parcel.readTypedList(this, Participant.CREATOR)
             }
-            return Dialog(chatId, updateTime, type, title, icon, unreadCount, lastMsg, participants)
+            return Chat(chatId, updateTime, type, title, icon, unreadCount, lastMsg, participants)
         }
 
-        override fun newArray(size: Int): Array<Dialog?> {
+        override fun newArray(size: Int): Array<Chat?> {
             return arrayOfNulls(size)
         }
     }
 
 }
 
-enum class DialogType(val value: Int) {
+enum class ChatType(val value: Int) {
     PRIVATE(0),
     GROUP(1);
 

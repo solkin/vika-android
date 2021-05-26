@@ -5,8 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.tomclaw.cache.DiskLruCache
 import com.tomclaw.vika.core.CoreDbHelper
-import com.tomclaw.vika.core.Dialogs
-import com.tomclaw.vika.core.DialogsImpl
+import com.tomclaw.vika.core.Chats
+import com.tomclaw.vika.core.ChatsImpl
 import com.tomclaw.vika.util.Logger
 import com.tomclaw.vika.util.LoggerImpl
 import com.tomclaw.vika.util.SchedulersFactory
@@ -29,7 +29,7 @@ class AppModule(private val app: Application) {
 
     @Provides
     @Singleton
-    fun provideDialogs(db: SQLiteDatabase): Dialogs = DialogsImpl(db)
+    fun provideChats(db: SQLiteDatabase): Chats = ChatsImpl(db)
 
     @Provides
     @Singleton

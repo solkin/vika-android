@@ -6,7 +6,7 @@ import com.tomclaw.vika.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-interface DialogsResourceProvider {
+interface ChatsResourceProvider {
 
     fun formatDate(time: Long): String
 
@@ -14,7 +14,7 @@ interface DialogsResourceProvider {
 
 }
 
-class DialogsResourceProviderImpl(val resources: Resources) : DialogsResourceProvider {
+class ChatsResourceProviderImpl(val resources: Resources) : ChatsResourceProvider {
 
     @SuppressLint("ConstantLocale")
     private val simpleDateFormat = SimpleDateFormat("HH:mm dd.MM.yy", Locale.getDefault())
