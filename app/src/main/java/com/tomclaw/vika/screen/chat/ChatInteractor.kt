@@ -1,4 +1,11 @@
 package com.tomclaw.vika.screen.chat
 
-class ChatInteractor {
+import com.tomclaw.vika.util.SchedulersFactory
+
+interface ChatInteractor {
+}
+
+class ChatInteractorImpl(
+    private val schedulers: SchedulersFactory
+) : ChatInteractor {
 }
