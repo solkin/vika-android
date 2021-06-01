@@ -1,5 +1,7 @@
 package com.tomclaw.vika.screen.chat
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.tomclaw.vika.R
@@ -56,4 +58,12 @@ class ChatActivity : AppCompatActivity(), ChatPresenter.ChatRouter {
 
 }
 
+fun createChatActivityIntent(
+    context: Context,
+    chatId: Int
+): Intent = Intent(context, ChatActivity::class.java)
+    .putExtra(EXTRA_CHAT_ID, chatId)
+
 private const val KEY_PRESENTER_STATE = "presenter_state"
+
+private const val EXTRA_CHAT_ID = "chat_id"
