@@ -30,6 +30,8 @@ interface HomePresenter : ItemClickListener {
 
     interface HomeRouter {
 
+        fun openChatScreen(chatId: Int)
+
         fun leaveScreen()
 
     }
@@ -114,12 +116,7 @@ class HomePresenterImpl(
 
     override fun onItemClick(item: Item) {
         val chat = chatIds[item.id] ?: return
-//        subscriptions += interactor.switchBook(bookId)
-//            .observeOn(schedulers.mainThread())
-//            .subscribe(
-//                { onBookSwitched() },
-//                { onError(it) }
-//            )
+        router?.openChatScreen(chat.chatId)
     }
 
 }

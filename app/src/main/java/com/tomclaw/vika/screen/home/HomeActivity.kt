@@ -1,5 +1,6 @@
 package com.tomclaw.vika.screen.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.avito.konveyor.ItemBinder
@@ -7,6 +8,7 @@ import com.avito.konveyor.adapter.AdapterPresenter
 import com.avito.konveyor.adapter.SimpleRecyclerAdapter
 import com.tomclaw.vika.R
 import com.tomclaw.vika.main.getComponent
+import com.tomclaw.vika.screen.chat.createChatActivityIntent
 import com.tomclaw.vika.screen.home.di.HomeModule
 import javax.inject.Inject
 
@@ -58,6 +60,11 @@ class HomeActivity : AppCompatActivity(), HomePresenter.HomeRouter {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBundle(KEY_PRESENTER_STATE, presenter.saveState())
+    }
+
+    override fun openChatScreen(chatId: Int) {
+        val intent = createChatActivityIntent(context = this, chatId = chatId)
+        startActivity(intent)
     }
 
     override fun leaveScreen() {

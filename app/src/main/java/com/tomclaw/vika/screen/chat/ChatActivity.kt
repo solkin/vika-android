@@ -21,7 +21,7 @@ class ChatActivity : AppCompatActivity(), ChatPresenter.ChatRouter {
             .inject(activity = this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_chat)
 
         val view = ChatViewImpl(window.decorView)
 
