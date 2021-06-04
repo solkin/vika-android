@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="amber_300">#FFD54F</color>
-    <color name="amber_600">#FFB300</color>
-    <color name="amber_800">#FF8F00</color>
-    <color name="light_green_300">#AED581</color>
-    <color name="light_green_800">#558B2F</color>
+    <color name="amber_300">#245b7f</color>
+    <color name="amber_600">#205070</color>
+    <color name="amber_800">#173a51</color>
+    <color name="light_green_300">#d55a55</color>
+    <color name="light_green_800">#a1342f</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
